@@ -23,7 +23,6 @@ resource "aws_instance" "master-node" {
               sudo hostnamectl set-hostname master
               EOF
 
-
   tags = {
     Name = "kubernetes - Master Node"
   }
@@ -49,14 +48,43 @@ resource "aws_security_group" "master-node" {
   name        = "Master Node"
   description = "Master Node"
 
+  # SSH
   ingress {
+    description = "SSH"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+
+  # Kubernetes API Server
+  ingress {
+    description = "Kubernetes API Server"
+    from_port   = 6443
+    to_port     = 6443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # etcd server client API
+  ingress {
+    description = "ETCd server client API"
+    from_port   = 2379
+    to_port     = 2380
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  # Kubelet API
+  ingress {
+    description = "Kubelet API"
+    from_port   = 10250
+    to_port     = 10250
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
   tags = {
-    Name = "kubernetes - Worker Node"
+    Name = "kubernetes - Master Node"
   }
 }
 
@@ -64,9 +92,46 @@ resource "aws_security_group" "worker-node" {
   name        = "Worker Node"
   description = "Worker Node"
 
+  # SSH
   ingress {
+    description = "SSH"
     from_port   = 22
     to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  # Kubernetes API Server
+  ingress {
+    description     = "Kubernetes API Server"
+    from_port       = 6443
+    to_port         = 6443
+    protocol        = "tcp"
+    security_groups = [aws_security_group.master-node.id]
+  }
+
+  # etcd server client API
+  ingress {
+    description     = "ETCd server client API"
+    from_port       = 2379
+    to_port         = 2380
+    protocol        = "tcp"
+    security_groups = [aws_security_group.master-node.id]
+  }
+
+  # Kubelet API
+  ingress {
+    description     = "Kubelet API"
+    from_port       = 10250
+    to_port         = 10250
+    protocol        = "tcp"
+    security_groups = [aws_security_group.master-node.id]
+  }
+
+  # NodePort Services
+  ingress {
+    description = "NodePort Services"
+    from_port   = 30000
+    to_port     = 32767
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
