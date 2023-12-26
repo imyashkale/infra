@@ -48,6 +48,13 @@ resource "aws_security_group" "master-node" {
   name        = "Master Node"
   description = "Master Node"
 
+  # Allow all outgoing traffic
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
   # SSH
   ingress {
     description = "SSH"
@@ -91,6 +98,14 @@ resource "aws_security_group" "master-node" {
 resource "aws_security_group" "worker-node" {
   name        = "Worker Node"
   description = "Worker Node"
+
+  # Allow all outgoing traffic
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
   # SSH
   ingress {
