@@ -9,6 +9,11 @@ variable "ami" {
 }
 
 variable "key_name" {
-  default = "mackbook-pro"
+  default     = "mackbook-pro"
   description = "Key name for EC2 instances"
+}
+
+variable "local_key_path" {
+  default     = "~/mackbook-pro.pem"
+  description = "Local Key Path"
 }
