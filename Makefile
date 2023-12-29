@@ -5,3 +5,4 @@ recreate-infra:
 	terraform fmt
 	terraform destroy --auto-approve
 	terraform apply --auto-approve
+	echo 'Recration Completed'
