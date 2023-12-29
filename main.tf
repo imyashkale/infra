@@ -20,6 +20,8 @@ resource "aws_instance" "master-node" {
 
   user_data = <<-EOF
               #!/bin/bash
+              sudo apt-get update
+              sudo apt-get upgrade -y
               sudo hostnamectl set-hostname master
               EOF
 
@@ -36,6 +38,8 @@ resource "aws_instance" "worker-node" {
 
   user_data = <<-EOF
               #!/bin/bash
+              sudo apt-get update
+              sudo apt-get upgrade -y
               sudo hostnamectl set-hostname worker-node-01
               EOF
 
