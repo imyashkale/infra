@@ -1,3 +1,4 @@
 .terraform/*
 .terraform*
 errored.tfstate
+imyashkale.crt
